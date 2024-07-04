@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <title>Cruzar Planilhas</title>
+</head>
+<body>
+    <div class = "container">
+        <form action="/resultado" method = "post" enctype="multipart/form-data">
+            <h1>Cruzamento de Planilhas</h1>
+                <label for="name-file">Nome do Arquivo Resultante</label>
+                <input type="text" id="name-file" name='name-file' required>
+                <label for="file-initial">Selecione o arquivo de Data Início</label>
+                <input type="file" id="file-initial" name='file-initial' accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required>
+                <label for="file-final">Selecione o arquivo de Data Fim</label>
+                <input type="file" id="file-final" name='file-final' accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required>
+                <button type="submit">Gerar Arquivo</button>
+        </form>
+    </div>
+</body>
+    <script>
+        const fileLabelInitial = document.querySelector('label[for="file-initial"]');
+        const fileLabelFinal = document.querySelector('label[for="file-final"]');
+        document.getElementById('file-initial').addEventListener('change', function() {
+            if (this.files.length > 0) {
+                fileLabelInitial.classList.add('has-value');
+                fileLabelInitial.textContent = this.files[0].name;
+            } else {
+                fileLabelInitial.textContent = 'Selecione o Arquivo Inicial';
+                fileLabelInitial.classList.remove('has-value');
+            }
+        });
+        document.getElementById('file-final').addEventListener('change', function() {
+            if (this.files.length > 0) {
+                fileLabelFinal.textContent = this.files[0].name;
+                fileLabelFinal.classList.add('has-value');
+            } else {
+                fileLabelFinal.classList.remove('has-value');
+                fileLabelFinal.textContent = 'Selecione o Arquivo Final';
+            }
+        });
+    </script>
+
+
+</html>
