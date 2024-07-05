@@ -76,7 +76,7 @@ label[for="name-file"]{
     margin: 0;
     width: auto;
     padding: 0;
-    color: #333;
+    color: #1E6297;
     background-color: transparent;
 }
 
@@ -87,7 +87,6 @@ input[type='text'] {
     border: none;
     outline-style: none;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
-
 }
 button{
     margin-top: 10px;
@@ -97,7 +96,6 @@ button{
     font-weight:600;
     color: #FFF;
     border: none;
-    
     border-radius: 4px;
     cursor: pointer;
 }
