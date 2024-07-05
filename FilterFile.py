@@ -1,5 +1,4 @@
 import pandas as pd
-import os
 from io import BytesIO
 
 def main(file_initial_obj, file_final_obj, name_file):
@@ -12,7 +11,6 @@ def main(file_initial_obj, file_final_obj, name_file):
         
     print("Lendo dados do Arquivo CSV...")
 
-    print(file_final_obj)
     try:
         ### Ler arquivos como CSV
         base_inicial = pd.read_csv(file_initial_obj, sep=";", encoding='utf-8')
@@ -39,13 +37,12 @@ def main(file_initial_obj, file_final_obj, name_file):
     except:
         print("Não foi possível cruzar as informações dos arquivos, verifique se os nomes das colunas estão como 'username' e 'course1'")
 
-
     print('Juntando bases e salvando no Downloads...')
     try:
         base_completa = base_inicial.merge(base_final, on=["username", 'course1'], how='outer')
     except:
         print("Não foi possível juntar ambas as bases, verifique os nomes das colunas ou quantidade de colunas.")
-    print(base_completa)
+    
     ### Organizar colunas duplicadas
     base_completa = base_completa.drop(columns=['Status_y'])
     base_completa = base_completa.rename(columns={"Status_x": "Status"})
@@ -54,7 +51,6 @@ def main(file_initial_obj, file_final_obj, name_file):
     
     ## Salvar Arquivo na pasta de downloads
     try:
-        # base_completa.to_csv("downloads\\"+name_file+".csv", sep=";", encoding='utf-8', index=False)
         # Salva o resultado em um objeto BytesIO
         output = BytesIO()
         base_completa.to_csv(output, sep=";", encoding='utf-8', index=False)
