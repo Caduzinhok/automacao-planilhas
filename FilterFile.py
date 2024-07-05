@@ -1,9 +1,11 @@
 import pandas as pd
 import os
 
-
+def clearFiles(path):
+    for file in os.listdir(path): 
+        os.remove(path+file)
 def main(file_initial_path, file_final_path, name_file):
-    
+    clearFiles('downloads/')
     ### Validações para evitar erros de formato.
     if('.' in name_file):
         name_file = str(name_file).replace(".", '')
@@ -11,10 +13,6 @@ def main(file_initial_path, file_final_path, name_file):
     if('csv' in name_file):
         name_file = str(name_file).replace(".csv", '')
         
-    ### Variáveis de uso
-    username = os.getenv("USERNAME")
-    path_downloads = "C:\\Users\\"+username+"\\Downloads"
-
     print("Lendo dados do Arquivo CSV...")
 
     try:
@@ -57,7 +55,9 @@ def main(file_initial_path, file_final_path, name_file):
     
     ## Salvar Arquivo na pasta de downloads
     try:
-        base_completa.to_csv(path_downloads+"\\"+name_file+".csv", sep=";", encoding='utf-8', index=False)
+        base_completa.to_csv("downloads\\"+name_file+".csv", sep=";", encoding='utf-8', index=False)
     except:
         print("Não foi possível salvar base Planilhas de Ofertas no caminho")
     print("Dados salvos com sucesso na pasta!!!")
+    
+    return name_file+".csv"
