@@ -1,11 +1,7 @@
 import pandas as pd
 import os
 
-def clearFiles(path):
-    for file in os.listdir(path): 
-        os.remove(path+file)
 def main(file_initial_path, file_final_path, name_file):
-    clearFiles('downloads/')
     ### Validações para evitar erros de formato.
     if('.' in name_file):
         name_file = str(name_file).replace(".", '')
