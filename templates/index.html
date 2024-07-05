@@ -31,19 +31,15 @@
         const fileLabelFinal = document.querySelector('label[for="file-final"]');
         document.getElementById('file-initial').addEventListener('change', function() {
             if (this.files.length > 0) {
-                fileLabelInitial.classList.add('has-value');
                 fileLabelInitial.textContent = this.files[0].name;
             } else {
                 fileLabelInitial.textContent = 'Selecione o Arquivo Inicial';
-                fileLabelInitial.classList.remove('has-value');
             }
         });
         document.getElementById('file-final').addEventListener('change', function() {
             if (this.files.length > 0) {
                 fileLabelFinal.textContent = this.files[0].name;
-                fileLabelFinal.classList.add('has-value');
             } else {
-                fileLabelFinal.classList.remove('has-value');
                 fileLabelFinal.textContent = 'Selecione o Arquivo Final';
             }
         });
