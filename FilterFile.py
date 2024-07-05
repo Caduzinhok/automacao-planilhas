@@ -31,7 +31,7 @@ def main(file_initial_obj, file_final_obj, name_file):
             base_filtrada = base_filtrada[base_filtrada['course1'] == curso]
 
             if(len(base_filtrada) >= 1 and (user_mail != "#N/D")): ### Se encontrou o usuário e o usuário não é nulo ou undefined
-                base_inicial.at[index, 'Status'] = 'active'
+                base_inicial.at[index, 'Status'] = 'active'                
             else:
                 base_inicial.at[index, 'Status'] = 'suspended'
     except:
@@ -47,13 +47,21 @@ def main(file_initial_obj, file_final_obj, name_file):
     base_completa = base_completa.drop(columns=['Status_y'])
     base_completa = base_completa.rename(columns={"Status_x": "Status"})
     
+    base_completa['statusenrol1'] = ''
+    
     base_completa.loc[base_completa['Status'].isnull(),'Status'] = 'new' # Aqueles que não foram encontrados, setar como new
     
+    ### Criar coluna para o moodle
+    base_completa.loc[base_completa['Status'] == 'suspended','statusenrol1'] = '1' # Coluna statusenrol1
+    base_completa.loc[base_completa['Status'] == 'new','statusenrol1'] = '0' # Coluna statusenrol1
+    base_completa.loc[base_completa['Status'] == 'active','statusenrol1'] = '0' # Coluna statusenrol1
+    base_completa.loc[base_completa['Status'].isnull(),'statusenrol1'] = '0' # Coluna statusenrol1
+
     ## Salvar Arquivo na pasta de downloads
     try:
         # Salva o resultado em um objeto BytesIO
         output = BytesIO()
-        base_completa.to_csv(output, sep=";", encoding='utf-8', index=False)
+        base_completa.to_csv(output, sep=";", encoding='utf-8-sig', index=False)
         output.seek(0)
     except:
         print("Não foi possível salvar base Planilhas de Ofertas no caminho")

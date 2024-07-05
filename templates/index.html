@@ -9,15 +9,22 @@
 <body>
     <div class = "container">
         <form action="/resultado" method = "post" enctype="multipart/form-data">
-            <h1>Cruzamento de Planilhas</h1>
-                <label for="name-file">Nome do Arquivo Resultante</label>
+            <div class="header">
+                <a href="https://ava.unibras.digital/">
+                    <img src="{{url_for('static', filename='unibras-digital-logo.png')}}"  alt="Logo Unibras"/>
+                </a>
+                <h1>Cruzamento de Planilhas</h1>
+            </div>
+                <label for="name-file">Nome do Arquivo Final</label>
                 <input type="text" id="name-file" name='name-file' required>
-                <label for="file-initial">Selecione o arquivo de Data Início</label>
+                <label for="file-initial">Selecione o arquivo inicial</label>
                 <input type="file" id="file-initial" name='file-initial' accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required>
-                <label for="file-final">Selecione o arquivo de Data Fim</label>
+                <label for="file-final">Selecione o arquivo final</label>
                 <input type="file" id="file-final" name='file-final' accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required>
                 <button type="submit">Gerar Arquivo</button>
         </form>
+        <p>&copy; 2024 <a href="https://github.com/Caduzinhok">Carlos Andrade</a></p>
+
     </div>
 </body>
     <script>
