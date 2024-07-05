@@ -8,13 +8,13 @@
 </head>
 <body>
     <div class = "container">
+        <div class="header">
+            <a href="https://ava.unibras.digital/">
+                <img src="{{url_for('static', filename='unibras-digital-logo.png')}}"  alt="Logo Unibras"/>
+            </a>
+            <h1>Cruzamento de Planilhas</h1>
+        </div>
         <form action="/resultado" method = "post" enctype="multipart/form-data">
-            <div class="header">
-                <a href="https://ava.unibras.digital/">
-                    <img src="{{url_for('static', filename='unibras-digital-logo.png')}}"  alt="Logo Unibras"/>
-                </a>
-                <h1>Cruzamento de Planilhas</h1>
-            </div>
                 <label for="name-file">Nome do Arquivo Final</label>
                 <input type="text" id="name-file" name='name-file' required>
                 <label for="file-initial">Selecione o arquivo inicial</label>
@@ -24,7 +24,6 @@
                 <button type="submit">Gerar Arquivo</button>
         </form>
         <p>&copy; 2024 <a href="https://github.com/Caduzinhok">Carlos Andrade</a></p>
-
     </div>
 </body>
     <script>
