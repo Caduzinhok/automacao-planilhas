@@ -1,7 +1,8 @@
 import pandas as pd
 import os
+from io import BytesIO
 
-def main(file_initial_path, file_final_path, name_file):
+def main(file_initial_obj, file_final_obj, name_file):
     ### Validações para evitar erros de formato.
     if('.' in name_file):
         name_file = str(name_file).replace(".", '')
@@ -11,10 +12,11 @@ def main(file_initial_path, file_final_path, name_file):
         
     print("Lendo dados do Arquivo CSV...")
 
+    print(file_final_obj)
     try:
         ### Ler arquivos como CSV
-        base_inicial = pd.read_csv(file_initial_path, sep=";", encoding='utf-8')
-        base_final =  pd.read_csv(file_final_path, sep=";", encoding='utf-8') 
+        base_inicial = pd.read_csv(file_initial_obj, sep=";", encoding='utf-8')
+        base_final =  pd.read_csv(file_final_obj, sep=";", encoding='utf-8') 
         base_final['Status'] = ''
         base_inicial['Status'] = ''
     except:
@@ -43,6 +45,7 @@ def main(file_initial_path, file_final_path, name_file):
         base_completa = base_inicial.merge(base_final, on=["username", 'course1'], how='outer')
     except:
         print("Não foi possível juntar ambas as bases, verifique os nomes das colunas ou quantidade de colunas.")
+    print(base_completa)
     ### Organizar colunas duplicadas
     base_completa = base_completa.drop(columns=['Status_y'])
     base_completa = base_completa.rename(columns={"Status_x": "Status"})
@@ -51,9 +54,13 @@ def main(file_initial_path, file_final_path, name_file):
     
     ## Salvar Arquivo na pasta de downloads
     try:
-        base_completa.to_csv("downloads\\"+name_file+".csv", sep=";", encoding='utf-8', index=False)
+        # base_completa.to_csv("downloads\\"+name_file+".csv", sep=";", encoding='utf-8', index=False)
+        # Salva o resultado em um objeto BytesIO
+        output = BytesIO()
+        base_completa.to_csv(output, sep=";", encoding='utf-8', index=False)
+        output.seek(0)
     except:
         print("Não foi possível salvar base Planilhas de Ofertas no caminho")
     print("Dados salvos com sucesso na pasta!!!")
     
-    return name_file+".csv"
+    return output
