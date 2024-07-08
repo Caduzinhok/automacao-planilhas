@@ -47,15 +47,15 @@ def main(file_initial_obj, file_final_obj, name_file):
     base_completa = base_completa.drop(columns=['Status_y'])
     base_completa = base_completa.rename(columns={"Status_x": "Status"})
     
-    base_completa['statusenrol1'] = ''
+    base_completa['enrolstatus1'] = ''
     
     base_completa.loc[base_completa['Status'].isnull(),'Status'] = 'new' # Aqueles que não foram encontrados, setar como new
     
     ### Criar coluna para o moodle
-    base_completa.loc[base_completa['Status'] == 'suspended','statusenrol1'] = '1' # Coluna statusenrol1
-    base_completa.loc[base_completa['Status'] == 'new','statusenrol1'] = '0' # Coluna statusenrol1
-    base_completa.loc[base_completa['Status'] == 'active','statusenrol1'] = '0' # Coluna statusenrol1
-    base_completa.loc[base_completa['Status'].isnull(),'statusenrol1'] = '0' # Coluna statusenrol1
+    base_completa.loc[base_completa['Status'] == 'suspended','enrolstatus1'] = '1' # Coluna enrolstatus1
+    base_completa.loc[base_completa['Status'] == 'new','enrolstatus1'] = '0' # Coluna enrolstatus1
+    base_completa.loc[base_completa['Status'] == 'active','enrolstatus1'] = '0' # Coluna enrolstatus1
+    base_completa.loc[base_completa['Status'].isnull(),'enrolstatus1'] = '0' # Coluna enrolstatus1
 
     ## Salvar Arquivo na pasta de downloads
     try:
