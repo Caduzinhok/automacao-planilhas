@@ -1,6 +1,6 @@
 from flask import *
 import os
-from FilterFile import main
+from api.FilterFile import main
 app = Flask(__name__)
 @app.route("/")
 def index():
