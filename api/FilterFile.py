@@ -4,7 +4,7 @@ from io import BytesIO
 def main(file_initial_obj, file_final_obj, name_file):
     # Validações para o nome do arquivo
     name_file = name_file.split('.')[0].replace(".csv", '')
-    
+
     print("Lendo dados do Arquivo CSV...")
 
     try:
@@ -20,21 +20,15 @@ def main(file_initial_obj, file_final_obj, name_file):
     print("Filtrando dados do arquivo CSV...")
 
     try:
-        # Verificando items que estavam na base 1 (Ativos e Suspensos)
-        for index, row in base_inicial.iterrows():
-            user_mail = row['username']
-            curso = row['course1']
-
-            if user_mail == "#N/D":
-                base_inicial.at[index, 'Status'] = 'suspended'
-                continue
-
-            base_filtrada = base_final[(base_final['username'] == user_mail) & (base_final['course1'] == curso)]
-
-            if not base_filtrada.empty:
-                base_inicial.at[index, 'Status'] = 'active'
-            else:
-                base_inicial.at[index, 'Status'] = 'suspended'
+        # Merge para identificar correspondências entre base_inicial e base_final
+        merged = pd.merge(base_inicial[['username', 'course1']], base_final[['username', 'course1']], 
+                          on=['username', 'course1'], how='left', indicator=True)
+        
+        # Definir status com base no resultado do merge
+        base_inicial['Status'] = merged['_merge'].map({'both': 'active', 'left_only': 'suspended'})
+        
+        # Substituir valores inválidos por 'suspended'
+        base_inicial.loc[base_inicial['username'] == "#N/D", 'Status'] = 'suspended'
     except KeyError as e:
         print(f"Erro nas colunas: {e}")
         return None
@@ -45,7 +39,7 @@ def main(file_initial_obj, file_final_obj, name_file):
     print("Juntando bases e salvando no Downloads...")
     
     try:
-        # Juntar as bases
+        # Juntar as bases com um novo merge
         base_completa = pd.merge(base_inicial, base_final, on=["username", "course1"], how='outer', suffixes=('_inicial', '_final'))
         base_completa.drop(columns=['Status_final'], inplace=True)
         base_completa.rename(columns={"Status_inicial": "Status"}, inplace=True)
