@@ -9,8 +9,8 @@ def main(file_initial_obj, file_final_obj, name_file):
 
     try:
         # Ler arquivos como CSV
-        base_inicial = pd.read_csv(file_initial_obj, sep=";", encoding='utf-8')
-        base_final = pd.read_csv(file_final_obj, sep=";", encoding='utf-8')
+        base_inicial = pd.read_csv(file_initial_obj, sep=";", encoding='utf-8-sig')
+        base_final = pd.read_csv(file_final_obj, sep=";", encoding='utf-8-sig')
         base_inicial['Status'] = ''
         base_final['Status'] = ''
     except Exception as e:
@@ -22,25 +22,22 @@ def main(file_initial_obj, file_final_obj, name_file):
     try:
         # Merge para identificar correspondências entre base_inicial e base_final
         merged = pd.merge(base_inicial[['username', 'course1']], base_final[['username', 'course1']], 
-                          on=['username', 'course1'], how='left', indicator=True)
+                          on=['username', 'course1'], how='outer', indicator=True)
         
         # Definir status com base no resultado do merge
-        base_inicial['Status'] = merged['_merge'].map({'both': 'active', 'left_only': 'suspended'})
-        
-        # Substituir valores inválidos por 'suspended'
-        base_inicial.loc[base_inicial['username'] == "#N/D", 'Status'] = 'suspended'
+        merged['Status'] = merged['_merge'].map({'both': 'active', 'left_only': 'suspended', 'right_only':'active'})
+        ## Substituir valores inválidos por 'suspended'
+        merged.loc[merged['username'] == "#N/D", 'Status'] = 'suspended'
+        merged = merged.drop(columns=['_merge'])
     except KeyError as e:
         print(f"Erro nas colunas: {e}")
         return None
-    except Exception as e:
-        print(f"Erro ao cruzar informações: {e}")
-        return None
-
+    
     print("Juntando bases e salvando no Downloads...")
     
     try:
         # Juntar as bases com um novo merge
-        base_completa = pd.merge(base_inicial, base_final, on=["username", "course1"], how='outer', suffixes=('_inicial', '_final'))
+        base_completa = pd.merge(merged, base_final, on=["username", "course1"], how='outer', suffixes=('_inicial', '_final'))
         base_completa.drop(columns=['Status_final'], inplace=True)
         base_completa.rename(columns={"Status_inicial": "Status"}, inplace=True)
         base_completa['enrolstatus1'] = ''
@@ -49,6 +46,7 @@ def main(file_initial_obj, file_final_obj, name_file):
         base_completa.loc[base_completa['Status'] == 'suspended', 'enrolstatus1'] = '1'
         base_completa.loc[base_completa['Status'].isnull(), 'Status'] = 'new'
         base_completa.loc[base_completa['Status'].isin(['new', 'active']), 'enrolstatus1'] = '0'
+        base_completa = base_completa.drop(columns=['Status'])
     except Exception as e:
         print(f"Erro ao juntar as bases: {e}")
         return None
